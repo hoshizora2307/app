@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>たいようと おつきさま</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#3a2f66;
+    --sky-bot:#241c47;
+    --cream:#fbf3d9;
+    --cream-soft:#e9dfc4;
+    --sun-a:#ffd66b;
+    --sun-b:#ff9a3c;
+    --moon-a:#f7f0e0;
+    --moon-b:#ded2ba;
+    --rose:#f4a6b8;
+    --lav:#b8a6e8;
+    --panel:#efe7f7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:"Zen Maru Gothic",system-ui,sans-serif;
+    background:linear-gradient(180deg,var(--sky-top),var(--sky-bot));
+    color:var(--cream);
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:16px;
+    overflow-x:hidden;
+  }
+  .wrap{width:100%;max-width:640px;text-align:center}
+  h1{
+    font-weight:900;font-size:clamp(22px,6vw,32px);
+    letter-spacing:.02em;line-height:1.35;margin-bottom:4px;
+    text-shadow:0 2px 10px rgba(0,0,0,.25);
+  }
+  h1 .em{color:var(--sun-a)}
+  .lead{font-weight:500;font-size:clamp(13px,3.4vw,16px);color:var(--cream-soft);margin-bottom:14px}
+  .stage{
+    position:relative;width:100%;border-radius:26px;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+  svg{display:block;width:100%;height:auto}
+  .caption{
+    min-height:2.9em;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:clamp(16px,4.4vw,21px);line-height:1.4;
+    margin:16px 6px 6px;transition:color .3s;
+  }
+  .caption .key{
+    background:linear-gradient(180deg,var(--sun-a),var(--sun-b));
+    color:#4a2a08;padding:.05em .4em;border-radius:8px;font-weight:900;
+    display:inline-block;
+  }
+  .control{margin:6px 4px 4px}
+  .ends{display:flex;justify-content:space-between;font-weight:700;font-size:14px;color:var(--cream-soft);margin:0 4px 6px}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:22px;border-radius:22px;
+    background:linear-gradient(90deg,rgba(255,214,107,.55),rgba(184,166,232,.45));
+    outline:none;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:46px;height:46px;border-radius:50%;
+    background:radial-gradient(circle at 32% 30%,#fff,var(--sun-a) 55%,var(--sun-b));
+    border:3px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:grab;
+  }
+  input[type=range]::-webkit-slider-thumb:active{cursor:grabbing}
+  input[type=range]::-moz-range-thumb{
+    width:44px;height:44px;border-radius:50%;border:3px solid #fff;
+    background:radial-gradient(circle at 32% 30%,#fff,var(--sun-a) 55%,var(--sun-b));
+    box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:grab;
+  }
+  .hint{
+    display:inline-block;margin-top:10px;font-weight:700;font-size:13px;color:var(--lav);
+    animation:sway 2.2s ease-in-out infinite;
+  }
+  @keyframes sway{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+  .more{margin-top:22px}
+  .more button{
+    font-family:inherit;font-weight:700;font-size:15px;color:#3a2f66;
+    background:var(--panel);border:none;border-radius:999px;padding:12px 22px;
+    box-shadow:0 4px 0 #c9bce0;cursor:pointer;transition:transform .1s,box-shadow .1s;
+  }
+  .more button:active{transform:translateY(3px);box-shadow:0 1px 0 #c9bce0}
+  .fact{
+    max-height:0;overflow:hidden;transition:max-height .45s ease,margin .45s ease,opacity .45s ease;
+    opacity:0;margin-top:0;
+  }
+  .fact.open{max-height:340px;opacity:1;margin-top:16px}
+  .fact .card{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+    border-radius:20px;padding:18px 20px;font-weight:500;font-size:15.5px;line-height:1.85;
+    color:var(--cream);text-align:left;
+  }
+  .fact .card b{color:var(--sun-a);font-weight:900}
+  .fact .big{
+    display:flex;gap:14px;justify-content:center;align-items:center;margin:14px 0 4px;
+    font-weight:900;font-size:15px;color:var(--cream-soft);
+  }
+  .fact .big span{background:rgba(0,0,0,.18);border-radius:14px;padding:10px 14px;text-align:center;flex:1}
+  .fact .big span b{display:block;font-size:26px}
+  footer{margin-top:20px;font-weight:500;font-size:11.5px;color:rgba(251,243,217,.45)}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>たいようと <span class="em">おつきさま</span><br>どっちが おおきい？</h1>
+  <p class="lead">スライダーを うごかして、たいようを とおくへ はこんでみてね</p>
+
+  <div class="stage">
+    <svg id="sky" viewBox="0 0 600 340" aria-label="よぞらに うかぶ たいようと おつきさま">
+      <defs>
+        <radialGradient id="sunGrad" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="#fff2c4"/>
+          <stop offset="45%" stop-color="var(--sun-a)"/>
+          <stop offset="100%" stop-color="var(--sun-b)"/>
+        </radialGradient>
+        <radialGradient id="moonGrad" cx="35%" cy="30%" r="80%">
+          <stop offset="0%" stop-color="#fffdf5"/>
+          <stop offset="55%" stop-color="var(--moon-a)"/>
+          <stop offset="100%" stop-color="var(--moon-b)"/>
+        </radialGradient>
+        <radialGradient id="corona" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(255,214,107,0)"/>
+          <stop offset="62%" stop-color="rgba(255,214,107,0)"/>
+          <stop offset="72%" stop-color="rgba(255,220,130,.95)"/>
+          <stop offset="82%" stop-color="rgba(255,180,80,.5)"/>
+          <stop offset="100%" stop-color="rgba(255,180,80,0)"/>
+        </radialGradient>
+      </defs>
+
+      <g id="stars"></g>
+
+      <!-- corona behind moon -->
+      <circle id="coronaC" cx="430" cy="150" r="110" fill="url(#corona)" opacity="0"/>
+
+      <!-- SUN (drawn first = behind moon) -->
+      <g id="sun">
+        <g id="rays"></g>
+        <circle id="sunBody" cx="150" cy="150" r="150" fill="url(#sunGrad)"/>
+        <g id="sunFace"></g>
+      </g>
+
+      <!-- MOON (on top) -->
+      <g id="moon">
+        <circle id="moonBody" cx="430" cy="150" r="52" fill="url(#moonGrad)"/>
+        <circle cx="415" cy="132" r="8" fill="#000" opacity=".05"/>
+        <circle cx="448" cy="165" r="6" fill="#000" opacity=".05"/>
+        <circle cx="438" cy="128" r="4" fill="#000" opacity=".05"/>
+        <circle id="moonShade" cx="430" cy="150" r="52" fill="#2a2050" opacity="0"/>
+        <g id="moonFace"></g>
+      </g>
+
+      <g id="sparkles"></g>
+    </svg>
+  </div>
+
+  <p class="caption" id="caption">たいようは とっても おおきいね ☀️</p>
+
+  <div class="control">
+    <div class="ends"><span>ちかい</span><span>とおい ➜</span></div>
+    <input type="range" id="dist" min="0" max="1000" value="0" aria-label="たいようまでの きょり">
+    <div><span class="hint" id="hint">👉 うごかしてみてね</span></div>
+  </div>
+
+  <div class="more">
+    <button id="whyBtn" aria-expanded="false">なんで おなじに みえるの？ 🤔</button>
+    <div class="fact" id="fact">
+      <div class="card">
+        ほんとうは たいようは、おつきさまより <b>400ばい</b> も おおきいんだ。
+        でもね、たいようは とっても とっても <b>とおく</b> にあって、ちょうど <b>400ばい</b> はなれた ところに いるんだよ。
+        だから そらで みると、ふしぎと <b>おなじ おおきさ</b> に みえるんだね。
+        <div class="big">
+          <span>たいようの おおきさ<b>×400</b></span>
+          <span>たいようまでの きょり<b>×400</b></span>
+        </div>
+        この きせきみたいな ぐうぜんが あるから、たいようが おつきさまに ぴったり かくれる 「にっしょく」が みられるんだよ。✨
+      </div>
+    </div>
+  </div>
+
+  <footer>星と君プロジェクト ・ うちゅうの おはなし</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const cy=150, moonCX=430, moonR=52;
+const sunStartR=150, sunEndR=52, sunStartCX=130, sunEndCX=430;
+
+const sky=document.getElementById("stars");
+for(let i=0;i<46;i++){
+  const c=document.createElementNS(NS,"circle");
+  c.setAttribute("cx",Math.random()*600);
+  c.setAttribute("cy",Math.random()*340);
+  const r=Math.random()*1.4+0.5;
+  c.setAttribute("r",r);
+  c.setAttribute("fill","#fbf3d9");
+  c.setAttribute("opacity",(Math.random()*0.6+0.2).toFixed(2));
+  sky.appendChild(c);
+}
+
+const moonShade=document.getElementById("moonShade");
+const sunBody=document.getElementById("sunBody");
+const sunFace=document.getElementById("sunFace");
+const rays=document.getElementById("rays");
+const moonFace=document.getElementById("moonFace");
+const coronaC=document.getElementById("coronaC");
+const caption=document.getElementById("caption");
+const slider=document.getElementById("dist");
+const hint=document.getElementById("hint");
+const sparkles=document.getElementById("sparkles");
+
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function smooth(edge0,edge1,x){const t=clamp((x-edge0)/(edge1-edge0),0,1);return t*t*(3-2*t);}
+
+function face(group,cx,cy,r,mode){
+  group.innerHTML="";
+  const eyeDX=r*0.34, eyeDY=r*0.12, eyeR=r*0.09;
+  if(mode==="happy"){
+    // ^ ^ eyes
+    for(const s of [-1,1]){
+      const p=document.createElementNS(NS,"path");
+      const ex=cx+s*eyeDX, ey=cy-eyeDY;
+      p.setAttribute("d",`M ${ex-eyeR*1.3} ${ey+eyeR} Q ${ex} ${ey-eyeR*1.4} ${ex+eyeR*1.3} ${ey+eyeR}`);
+      p.setAttribute("stroke","#5a3a12");p.setAttribute("stroke-width",Math.max(2,r*0.05));
+      p.setAttribute("fill","none");p.setAttribute("stroke-linecap","round");
+      group.appendChild(p);
+    }
+  }else{
+    for(const s of [-1,1]){
+      const e=document.createElementNS(NS,"circle");
+      e.setAttribute("cx",cx+s*eyeDX);e.setAttribute("cy",cy-eyeDY);
+      e.setAttribute("r",eyeR);e.setAttribute("fill","#5a3a12");
+      group.appendChild(e);
+      const g=document.createElementNS(NS,"circle");
+      g.setAttribute("cx",cx+s*eyeDX-eyeR*0.3);g.setAttribute("cy",cy-eyeDY-eyeR*0.3);
+      g.setAttribute("r",eyeR*0.35);g.setAttribute("fill","#fff");
+      group.appendChild(g);
+    }
+  }
+  // cheeks
+  for(const s of [-1,1]){
+    const ch=document.createElementNS(NS,"ellipse");
+    ch.setAttribute("cx",cx+s*r*0.5);ch.setAttribute("cy",cy+r*0.18);
+    ch.setAttribute("rx",r*0.13);ch.setAttribute("ry",r*0.09);
+    ch.setAttribute("fill","#f4a6b8");ch.setAttribute("opacity","0.75");
+    group.appendChild(ch);
+  }
+  // smile
+  const m=document.createElementNS(NS,"path");
+  const mw=r*0.28, my=cy+r*0.28;
+  m.setAttribute("d",`M ${cx-mw} ${my} Q ${cx} ${my+r*0.28} ${cx+mw} ${my}`);
+  m.setAttribute("stroke","#5a3a12");m.setAttribute("stroke-width",Math.max(2,r*0.055));
+  m.setAttribute("fill","none");m.setAttribute("stroke-linecap","round");
+  group.appendChild(m);
+}
+
+function drawRays(cx,cy,r,alpha){
+  rays.innerHTML="";
+  if(alpha<=0.01)return;
+  const n=12;
+  for(let i=0;i<n;i++){
+    const a=(i/n)*Math.PI*2;
+    const r1=r*1.06, r2=r*1.28;
+    const x1=cx+Math.cos(a)*r1, y1=cy+Math.sin(a)*r1;
+    const x2=cx+Math.cos(a)*r2, y2=cy+Math.sin(a)*r2;
+    const l=document.createElementNS(NS,"line");
+    l.setAttribute("x1",x1);l.setAttribute("y1",y1);
+    l.setAttribute("x2",x2);l.setAttribute("y2",y2);
+    l.setAttribute("stroke","#ffd66b");l.setAttribute("stroke-width",r*0.09);
+    l.setAttribute("stroke-linecap","round");l.setAttribute("opacity",alpha);
+    rays.appendChild(l);
+  }
+}
+
+let firedEclipse=false;
+function burst(){
+  const emo=["✨","⭐","💫"];
+  for(let i=0;i<10;i++){
+    const t=document.createElementNS(NS,"text");
+    const a=Math.random()*Math.PI*2, d=60+Math.random()*50;
+    t.setAttribute("x",moonCX);t.setAttribute("y",cy);
+    t.setAttribute("font-size",14+Math.random()*10);
+    t.setAttribute("text-anchor","middle");
+    t.textContent=emo[i%3];
+    sparkles.appendChild(t);
+    const dx=Math.cos(a)*d, dy=Math.sin(a)*d-20;
+    t.animate([
+      {transform:`translate(0,0)`,opacity:0},
+      {transform:`translate(${dx*0.5}px,${dy*0.5}px)`,opacity:1,offset:0.3},
+      {transform:`translate(${dx}px,${dy}px)`,opacity:0}
+    ],{duration:1400,easing:"ease-out"});
+    setTimeout(()=>t.remove(),1400);
+  }
+}
+
+const SPLIT=0.62;           // ここまでで太陽が月とおなじ大きさになる
+const parkCX=300;           // おなじ大きさで並ぶ位置（月の左）
+function render(t){
+  let r,cx;
+  if(t<=SPLIT){
+    const k=t/SPLIT;
+    r=lerp(sunStartR,sunEndR,k);
+    cx=lerp(sunStartCX,parkCX,k);
+  }else{
+    const k=(t-SPLIT)/(1-SPLIT);
+    r=sunEndR;
+    cx=lerp(parkCX,sunEndCX,k);
+  }
+  sunBody.setAttribute("r",r);
+  sunBody.setAttribute("cx",cx);
+  face(sunFace,cx,cy,r,"open");
+  drawRays(cx,cy,r,smooth(0.9,1,1-t)*0.9); // 近いうちだけ光る、重なると消える
+
+  const cor=smooth(0.9,1,t);
+  coronaC.setAttribute("opacity",cor);
+  coronaC.setAttribute("r",moonR*2.0);
+  moonShade.setAttribute("opacity",smooth(0.9,1,t)*0.4);
+
+  face(moonFace,moonCX,cy,moonR, t>0.95?"happy":"open");
+
+  let msg;
+  if(t<0.16){msg="たいようは とっても おおきいね ☀️";}
+  else if(t<0.5){msg="もっと とおくへ はこんでみて…";}
+  else if(t<0.72){msg="みて！ おつきさまと <span class=\"key\">おなじ おおきさ</span> だ！";}
+  else if(t<0.96){msg="そのまま かさねて… ➜";}
+  else{msg='ぴったり かさなった！ これが <span class="key">にっしょく</span> だよ ✨';}
+  caption.innerHTML=msg;
+
+  if(t>0.97 && !firedEclipse){firedEclipse=true;burst();}
+  if(t<0.9)firedEclipse=false;
+
+  if(t>0.05)hint.style.display="none"; else hint.style.display="inline-block";
+}
+
+slider.addEventListener("input",()=>render(slider.value/1000));
+render(0);
+
+const whyBtn=document.getElementById("whyBtn");
+const fact=document.getElementById("fact");
+whyBtn.addEventListener("click",()=>{
+  const open=fact.classList.toggle("open");
+  whyBtn.setAttribute("aria-expanded",open);
+  whyBtn.textContent=open?"とじる 🙌":"なんで おなじに みえるの？ 🤔";
+});
+</script>
+</body>
+</html>
