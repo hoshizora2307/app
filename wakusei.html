@@ -247,7 +247,7 @@ function positions(t){
   return PLANETS.map(p=>{
     const speed=Math.pow(56/p.R,1.5);
     const ang=(p.base*Math.PI/180)+t*Math.PI*2*2*speed;
-    return {x:cx0+p.R*Math.cos(ang), y:cy0+p.R*Math.sin(ang)};
+    return {x:cx0+p.R*Math.cos(ang), y:cy0-p.R*Math.sin(ang)};
   });
 }
 
